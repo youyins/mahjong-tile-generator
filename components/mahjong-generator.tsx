@@ -10,11 +10,14 @@ interface SelectedTile extends TileData {
   instanceId: string
 }
 
+type LayoutMode = "separated" | "compact"
+
 export function MahjongGenerator() {
   const [selectedTiles, setSelectedTiles] = useState<SelectedTile[]>([])
   const selectedAreaRef = useRef<HTMLDivElement>(null)
   const [tileSize, setTileSize] = useState({ width: 56, height: 76 })
   const [gap, setGap] = useState(8)
+  const [layoutMode, setLayoutMode] = useState<LayoutMode>("separated")
   const containerRef = useRef<HTMLDivElement>(null)
 
   const MAX_TILES = 16
@@ -31,7 +34,30 @@ export function MahjongGenerator() {
     const minWidth = 40
     const aspectRatio = 1.36
 
-    // Start with maximum gap and padding
+    // For compact mode, use minimal gap
+    if (layoutMode === "compact") {
+      const compactGap = 1
+      const padding = 16
+      const availableWidth = containerWidth - padding * 2
+      const requiredWidth = tileCount * idealWidth + (tileCount - 1) * compactGap
+
+      let finalWidth = idealWidth
+      if (requiredWidth > availableWidth && tileCount > 0) {
+        finalWidth = Math.max(
+          minWidth,
+          Math.floor((availableWidth - (tileCount - 1) * compactGap) / tileCount)
+        )
+      }
+
+      setTileSize({
+        width: finalWidth,
+        height: Math.round(finalWidth * aspectRatio),
+      })
+      setGap(compactGap)
+      return
+    }
+
+    // Separated mode: Start with maximum gap and padding
     let currentGap = 8
     let padding = 16
     
@@ -86,7 +112,7 @@ export function MahjongGenerator() {
       height: Math.round(finalWidth * aspectRatio),
     })
     setGap(currentGap)
-  }, [selectedTiles.length])
+  }, [selectedTiles.length, layoutMode])
 
   useEffect(() => {
     calculateLayout()
@@ -199,6 +225,33 @@ export function MahjongGenerator() {
               <Download className="w-4 h-4" />
               下載 PNG
             </Button>
+          </div>
+
+          {/* Layout Mode Toggle */}
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <span className="text-xs text-slate-500">排列模式：</span>
+            <div className="inline-flex rounded-lg border border-emerald-200 bg-emerald-50/50 p-0.5">
+              <button
+                onClick={() => setLayoutMode("separated")}
+                className={`px-3 py-1 text-xs rounded-md transition-all ${
+                  layoutMode === "separated"
+                    ? "bg-white text-emerald-700 shadow-sm font-medium"
+                    : "text-slate-500 hover:text-emerald-600"
+                }`}
+              >
+                分開排列
+              </button>
+              <button
+                onClick={() => setLayoutMode("compact")}
+                className={`px-3 py-1 text-xs rounded-md transition-all ${
+                  layoutMode === "compact"
+                    ? "bg-white text-emerald-700 shadow-sm font-medium"
+                    : "text-slate-500 hover:text-emerald-600"
+                }`}
+              >
+                貼齊排列
+              </button>
+            </div>
           </div>
 
           {/* Selected Tiles Display */}

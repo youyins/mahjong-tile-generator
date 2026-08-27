@@ -184,10 +184,10 @@ export function MahjongTile({
       className={cn(
         // Outer tile container - white background, rounded corners, shadow
         "relative bg-white rounded-lg overflow-hidden",
-        "border-2 border-emerald-700/20",
-        "shadow-[0_2px_8px_rgba(0,0,0,0.12),0_4px_12px_rgba(0,0,0,0.08)]",
+        "border border-[#dde5d7]",
+        "shadow-[0_3px_10px_rgba(0,0,0,0.08)]",
         // Hover effect - float up with deeper shadow
-        "hover:-translate-y-1 hover:shadow-[0_4px_16px_rgba(0,0,0,0.15),0_8px_24px_rgba(0,0,0,0.1)]",
+        "hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]",
         "transition-all duration-200 ease-out",
         "cursor-pointer select-none",
         sizeClasses[size],

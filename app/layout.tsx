@@ -7,7 +7,7 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: '麻將牌型產生器',
+  title: '麻將牌牌站',
   description: '快速產出範例麻將牌型圖片，支援萬、筒、條、字牌，下載透明背景 PNG',
   generator: 'v0.app',
   icons: {
@@ -35,7 +35,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="zh-TW" className="bg-slate-50">
+    <html lang="zh-TW" className="bg-[#f4faed]">
       <body className="font-sans antialiased">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
